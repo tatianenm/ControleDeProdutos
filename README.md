@@ -31,7 +31,7 @@ Certifique-se de ter o **Java 17** e o **Gradle 8.14.3** instalados na sua máqu
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://coderefinery.github.io/github-without-command-line/doi/](https://coderefinery.github.io/github-without-command-line/doi/)
+    git clone https://github.com/tatianenm/ControleDeProdutos.git
     ```
 
 2.  **Navegue até o diretório do projeto:**
