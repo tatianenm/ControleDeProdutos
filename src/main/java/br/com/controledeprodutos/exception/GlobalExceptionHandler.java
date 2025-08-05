@@ -1,5 +1,6 @@
-package com.controledeprodutos.exception;
+package br.com.controledeprodutos.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,7 +25,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<String> handleNotFound(NoSuchElementException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Registro não encontrado.");
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        String mensagem = "Erro de integridade de dados: O registro que você está tentando inserir já existe.";
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(mensagem);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body("Erro de argumento inválido: " + ex.getMessage());
     }
 }
 

@@ -1,4 +1,4 @@
-package com.controledeprodutos;
+package br.com.controledeprodutos;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
