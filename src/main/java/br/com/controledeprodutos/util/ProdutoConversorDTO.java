@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+
 public class ProdutoConversorDTO {
 
     public static ProdutoDTO toDTO(ProdutoEntity produtoEntity){
@@ -20,6 +20,7 @@ public class ProdutoConversorDTO {
                 .preco(produtoEntity.getPreco())
                 .origem(produtoEntity.getOrigem())
                 .quantidade(produtoEntity.getQuantidade())
+                .id(produtoEntity.getId())
                 .build();
     }
 
@@ -49,7 +50,7 @@ public class ProdutoConversorDTO {
     public static List<ProdutoEntity> toEntityList(List<ProdutoJsonDTO> dtoList) {
         return dtoList.stream()
                 .map(ProdutoConversorDTO::toEntity)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private static BigDecimal convertToBigDecimal(String valorString){

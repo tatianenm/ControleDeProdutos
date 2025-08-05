@@ -1,7 +1,5 @@
     package br.com.controledeprodutos.util;
 
-    import br.com.controledeprodutos.dto.ProdutoDataDTO;
-    import br.com.controledeprodutos.dto.ProdutoJsonDTO;
     import br.com.controledeprodutos.dto.interfaceDTO.DataWrapper;
     import com.fasterxml.jackson.databind.ObjectMapper;
     import lombok.extern.slf4j.Slf4j;
