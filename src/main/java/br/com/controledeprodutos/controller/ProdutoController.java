@@ -59,6 +59,4 @@
             return ResponseEntity.ok(produtos);
         }
 
-
-
     }

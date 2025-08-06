@@ -1,5 +1,6 @@
 package br.com.controledeprodutos.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -15,24 +16,23 @@ public class ProdutoDTO {
 
     private Long id;
 
-    @NotNull
+    @NotNull(message = "Nome da empresa é obrigatório")
     private String nomeEmpresa;
 
-    @NotNull
+    @NotNull(message = "Origem é obrigatória")
     private String origem;
 
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "Tipo é obrigatório")
     private String tipo;
 
-    @NotNull
+    @NotNull(message = "Preço é obrigatório")
     private BigDecimal preco;
 
-    @NotNull
+    @NotNull(message = "Quantidade é obrigatória")
+    @Min(value = 1, message = "Quantidade deve ser no mínimo 1")
     private Integer quantidade;
 
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "Nome do produto é obrigatório")
     private String nomeProduto;
 
 }
