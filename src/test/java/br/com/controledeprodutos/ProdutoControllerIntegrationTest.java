@@ -40,7 +40,6 @@ class ProdutoControllerIntegrationTest {
 
     @Test
     void salvarProduto_deveRetornarStatus201_quandoProdutoValido() throws Exception {
-        // Arrange: DTO de entrada
         ProdutoDTO produtoDTO = new ProdutoDTO();
         produtoDTO.setNomeProduto("Celular");
         produtoDTO.setOrigem("Brasil");
@@ -60,7 +59,6 @@ class ProdutoControllerIntegrationTest {
 
         when(produtoService.salvar(any(ProdutoDTO.class))).thenReturn(produtoSalvo);
 
-        // Act & Assert
         mockMvc.perform(post("/v1/produto")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(produtoDTO)))
