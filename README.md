@@ -2,8 +2,8 @@
 
 Uma API RESTful para o gerenciamento de produtos. Esta aplicação permite a realização de operações CRUD (Criar, Consultar Dados) de produtos, 
 utilizando um banco de dados H2 em memória para agilizar o desenvolvimento e os testes. Ao subir a aplicação temos uma classe chamada 
-CarregaMassaDados.java  que implementa CommandLineRunner que executa o processamento de 4 arquivos .json num processo stream paralelo  
-para ser mais rápido possível a leitura e armazenamento dos registros no banco.
+CarregaMassaDados.java  que implementa CommandLineRunner que executa o processamento de 4 arquivos .json num processo stream paralelo para 
+ser mais rápido possível a leitura e armazenamento dos registros no banco.
 
 ---
 
