@@ -36,6 +36,6 @@ server:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
-  packagesToScan: br.com.controledeprodutos.api
+  packagesToScan: br.com.controledeprodutos.controller
   api-docs:
     path: /api-docs
