@@ -40,28 +40,11 @@ class ProdutoControllerIntegrationTest {
 
     @Test
     void salvarProduto_deveRetornarStatus201_quandoProdutoValido() throws Exception {
-        ProdutoDTO produtoDTO = new ProdutoDTO();
-        produtoDTO.setNomeProduto("Celular");
-        produtoDTO.setOrigem("Brasil");
-        produtoDTO.setTipo("Eletrônico");
-        produtoDTO.setPreco(BigDecimal.valueOf(1200.00));
-        produtoDTO.setNomeEmpresa("Empresa Z");
-        produtoDTO.setQuantidade(5);
-
-        ProdutoDTO produtoSalvo = new ProdutoDTO();
-        produtoSalvo.setId(1L);
-        produtoSalvo.setNomeProduto("CELULAR");
-        produtoSalvo.setOrigem("BRASIL");
-        produtoSalvo.setTipo("ELETRÔNICO");
-        produtoSalvo.setPreco(BigDecimal.valueOf(1200.00));
-        produtoSalvo.setNomeEmpresa("EMPRESA Z");
-        produtoSalvo.setQuantidade(5);
-
-        when(produtoService.salvar(any(ProdutoDTO.class))).thenReturn(produtoSalvo);
+        when(produtoService.salvar(any(ProdutoDTO.class))).thenReturn(mockProdutoDTOSalvo());
 
         mockMvc.perform(post("/v1/produto")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(produtoDTO)))
+                        .content(objectMapper.writeValueAsString(mockProdutoDTO())))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1L))
@@ -74,17 +57,10 @@ class ProdutoControllerIntegrationTest {
 
     @Test
     void salvarProduto_deveRetornar400_quandoCamposInvalidos() throws Exception {
-        ProdutoDTO produtoDTO = new ProdutoDTO();
-        produtoDTO.setNomeProduto("");
-        produtoDTO.setOrigem(null);
-        produtoDTO.setTipo("");
-        produtoDTO.setPreco(BigDecimal.ZERO);
-        produtoDTO.setNomeEmpresa("");
-        produtoDTO.setQuantidade(0);
 
         mockMvc.perform(post("/v1/produto")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(produtoDTO)))
+                        .content(objectMapper.writeValueAsString(mockProdutoDTOCamposInvalidos())))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors.length()").value(Matchers.greaterThan(0)))
@@ -94,13 +70,7 @@ class ProdutoControllerIntegrationTest {
 
     @Test
     void buscarProdutos_deveRetornar200_quandoExistemProdutos() throws Exception {
-        ProdutoDTO produtoDTO = new ProdutoDTO();
-        produtoDTO.setId(1L);
-        produtoDTO.setNomeProduto("Celular");
-        produtoDTO.setPreco(BigDecimal.valueOf(1200.00));
-        produtoDTO.setNomeEmpresa("Empresa Z");
-
-        Page<ProdutoDTO> page = new PageImpl<>(List.of(produtoDTO));
+        Page<ProdutoDTO> page = new PageImpl<>(List.of(mockProdutoDTO()));
 
         when(produtoService.buscarProdutos(
                 eq("celular"), isNull(), isNull(),
@@ -117,8 +87,40 @@ class ProdutoControllerIntegrationTest {
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content[0].nomeProduto").value("Celular"))
                 .andExpect(jsonPath("$.content[0].nomeEmpresa").value("Empresa Z"));
+    }
 
+    private ProdutoDTO mockProdutoDTO(){
+        var produtoDTO = new ProdutoDTO();
+        produtoDTO.setNomeProduto("Celular");
+        produtoDTO.setOrigem("Brasil");
+        produtoDTO.setTipo("Eletrônico");
+        produtoDTO.setPreco(BigDecimal.valueOf(1200.00));
+        produtoDTO.setNomeEmpresa("Empresa Z");
+        produtoDTO.setQuantidade(5);
+        return produtoDTO;
+    }
 
+    private ProdutoDTO mockProdutoDTOSalvo(){
+        var produtoSalvo = new ProdutoDTO();
+        produtoSalvo.setId(1L);
+        produtoSalvo.setNomeProduto("CELULAR");
+        produtoSalvo.setOrigem("BRASIL");
+        produtoSalvo.setTipo("ELETRÔNICO");
+        produtoSalvo.setPreco(BigDecimal.valueOf(1200.00));
+        produtoSalvo.setNomeEmpresa("EMPRESA Z");
+        produtoSalvo.setQuantidade(5);
+        return produtoSalvo;
+    }
+
+    private ProdutoDTO mockProdutoDTOCamposInvalidos(){
+        var produtoDTO = new ProdutoDTO();
+        produtoDTO.setNomeProduto("");
+        produtoDTO.setOrigem(null);
+        produtoDTO.setTipo("");
+        produtoDTO.setPreco(BigDecimal.ZERO);
+        produtoDTO.setNomeEmpresa("");
+        produtoDTO.setQuantidade(0);
+        return produtoDTO;
     }
 
     }

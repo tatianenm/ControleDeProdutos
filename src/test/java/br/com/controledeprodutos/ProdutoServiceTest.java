@@ -40,58 +40,30 @@ class ProdutoServiceTest {
 
     @Test
     void deveSalvarProdutoDTOComSucesso() {
-        ProdutoDTO produtoDTO = new ProdutoDTO();
-        produtoDTO.setNomeProduto("Café");
-        produtoDTO.setOrigem("Brasil");
-        produtoDTO.setTipo("Grão");
-        produtoDTO.setPreco(BigDecimal.valueOf(15.0));
-        produtoDTO.setNomeEmpresa("Empresa X");
-        produtoDTO.setQuantidade(10);
-
-        ProdutoEntity produtoEntity = ProdutoConversorDTO.toEntity(produtoDTO);
-        ProdutoEntity produtoEntitySalvo = produtoEntity;
-        produtoEntitySalvo.setId(1L); // simula ID gerado
+        var produtoEntitySalvo = ProdutoConversorDTO.toEntity(mockProdutoDTO());;
+        produtoEntitySalvo.setId(1L);
 
         when(produtoRepository.save(any(ProdutoEntity.class))).thenReturn(produtoEntitySalvo);
 
-        ProdutoDTO resultado = produtoService.salvar(produtoDTO);
+        ProdutoDTO resultado = produtoService.salvar(mockProdutoDTO());
 
         assertNotNull(resultado);
-        assertEquals(produtoDTO.getNomeProduto().toUpperCase(), resultado.getNomeProduto());
+        assertEquals(mockProdutoDTO().getNomeProduto().toUpperCase(), resultado.getNomeProduto());
         assertEquals(1L, resultado.getId());
         verify(produtoRepository, times(1)).save(any(ProdutoEntity.class));
     }
 
     @Test
     void salvar_deveRetornarProdutoDTOSalvo_quandoChamadoComProdutoDTO() {
-        // Arrange
-        ProdutoDTO produtoDTOOriginal = new ProdutoDTO();
-        produtoDTOOriginal.setNomeProduto("Celular");
-        produtoDTOOriginal.setOrigem("Brasil");
-        produtoDTOOriginal.setTipo("Eletrônico");
-        produtoDTOOriginal.setPreco(BigDecimal.valueOf(999.99));
-        produtoDTOOriginal.setNomeEmpresa("Empresa X");
-        produtoDTOOriginal.setQuantidade(1);
+        var produtoEntityConvertido = ProdutoConversorDTO.toEntity(mockProdutoDTO());
 
-        ProdutoEntity produtoEntityConvertido = ProdutoConversorDTO.toEntity(produtoDTOOriginal);
-
-        ProdutoEntity produtoEntitySalvo = new ProdutoEntity();
-        produtoEntitySalvo.setId(1L);
-        produtoEntitySalvo.setNomeProduto(produtoEntityConvertido.getNomeProduto());
-        produtoEntitySalvo.setOrigem(produtoEntityConvertido.getOrigem());
-        produtoEntitySalvo.setTipo(produtoEntityConvertido.getTipo());
-        produtoEntitySalvo.setPreco(produtoEntityConvertido.getPreco());
-        produtoEntitySalvo.setNomeEmpresa(produtoEntityConvertido.getNomeEmpresa());
-        produtoEntitySalvo.setQuantidade(produtoEntityConvertido.getQuantidade());
-
-        when(produtoRepository.save(any(ProdutoEntity.class))).thenReturn(produtoEntitySalvo);
-
-        // Act
-        ProdutoDTO resultado = produtoService.salvar(produtoDTOOriginal);
-
-        // Assert
+        when(produtoRepository.save(any(ProdutoEntity.class)))
+                      .thenReturn(mockProdutoEntitySalvo(produtoEntityConvertido));
+        
+        var resultado = produtoService.salvar(mockProdutoDTO() );
+        
         assertNotNull(resultado);
-        assertEquals("CELULAR", resultado.getNomeProduto());
+        assertEquals("CAFÉ", resultado.getNomeProduto());
         assertEquals("EMPRESA X", resultado.getNomeEmpresa());
         assertEquals(1L, resultado.getId());
         verify(produtoRepository, times(1)).save(any(ProdutoEntity.class));
@@ -99,7 +71,6 @@ class ProdutoServiceTest {
 
     @Test
     void buscarProdutos_deveRetornarPageDTO_quandoSemFiltros() {
-        // Dados de entrada
         String nomeProduto = null;
         BigDecimal precoMin = null;
         BigDecimal precoMax = null;
@@ -111,17 +82,7 @@ class ProdutoServiceTest {
         Sort sort = Sort.by(Sort.Direction.ASC, ordenarPor);
         Pageable pageable = PageRequest.of(pagina, tamanho, sort);
 
-
-        ProdutoEntity produtoEntity = new ProdutoEntity();
-        produtoEntity.setId(1L);
-        produtoEntity.setNomeProduto("PRODUTO TESTE");
-        produtoEntity.setOrigem("Brasil");
-        produtoEntity.setTipo("Eletrônico");
-        produtoEntity.setPreco(new BigDecimal("100.00"));
-        produtoEntity.setNomeEmpresa("Empresa X");
-        produtoEntity.setQuantidade(5);
-
-        List<ProdutoEntity> produtoEntityList = Collections.singletonList(produtoEntity);
+        List<ProdutoEntity> produtoEntityList = Collections.singletonList(mockProdutoEntity());
         Page<ProdutoEntity> mockPageEntity = new PageImpl<>(produtoEntityList, pageable, produtoEntityList.size());
 
         when(produtoRepository.findAll(isNull(), eq(pageable))).thenReturn(mockPageEntity);
@@ -133,7 +94,7 @@ class ProdutoServiceTest {
         assertNotNull(resultado);
         assertEquals(1, resultado.getTotalElements());
         ProdutoDTO dtoConvertido = resultado.getContent().get(0);
-        assertEquals("PRODUTO TESTE", dtoConvertido.getNomeProduto());
+        assertEquals("CELULAR", dtoConvertido.getNomeProduto());
 
         verify(produtoRepository).findAll(isNull(), eq(pageable));
     }
@@ -151,16 +112,7 @@ class ProdutoServiceTest {
         Sort sort = Sort.by(Sort.Direction.ASC, ordenarPor);
         Pageable pageable = PageRequest.of(pagina, tamanho, sort);
 
-        ProdutoEntity produtoEntity = new ProdutoEntity();
-        produtoEntity.setId(1L);
-        produtoEntity.setNomeProduto("CELULAR");
-        produtoEntity.setOrigem("BRASIL");
-        produtoEntity.setTipo("ELETRONICO");
-        produtoEntity.setPreco(new BigDecimal("1200.00"));
-        produtoEntity.setNomeEmpresa("EMPRESA Z");
-        produtoEntity.setQuantidade(3);
-
-        List<ProdutoEntity> listaEntity = List.of(produtoEntity);
+        List<ProdutoEntity> listaEntity = List.of(mockProdutoEntity());
         Page<ProdutoEntity> mockPageEntity = new PageImpl<>(listaEntity, pageable, listaEntity.size());
 
         when(produtoRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(mockPageEntity);
@@ -177,6 +129,41 @@ class ProdutoServiceTest {
 
         verify(produtoRepository).findAll(any(Specification.class), eq(pageable));
 
+    }
+
+    private ProdutoDTO mockProdutoDTO(){
+        var produtoDTO = new ProdutoDTO();
+        produtoDTO.setNomeProduto("Café");
+        produtoDTO.setOrigem("Brasil");
+        produtoDTO.setTipo("Grão");
+        produtoDTO.setPreco(BigDecimal.valueOf(15.0));
+        produtoDTO.setNomeEmpresa("Empresa X");
+        produtoDTO.setQuantidade(10);
+        return produtoDTO;
+    }
+
+    private ProdutoEntity mockProdutoEntitySalvo(ProdutoEntity produtoEntityConvertido) {
+        var produtoEntitySalvo = new ProdutoEntity();
+        produtoEntitySalvo.setId(1L);
+        produtoEntitySalvo.setNomeProduto(produtoEntityConvertido.getNomeProduto());
+        produtoEntitySalvo.setOrigem(produtoEntityConvertido.getOrigem());
+        produtoEntitySalvo.setTipo(produtoEntityConvertido.getTipo());
+        produtoEntitySalvo.setPreco(produtoEntityConvertido.getPreco());
+        produtoEntitySalvo.setNomeEmpresa(produtoEntityConvertido.getNomeEmpresa());
+        produtoEntitySalvo.setQuantidade(produtoEntityConvertido.getQuantidade());
+        return produtoEntitySalvo;
+    }
+
+    private ProdutoEntity mockProdutoEntity(){
+        var produtoEntity = new ProdutoEntity();
+        produtoEntity.setId(1L);
+        produtoEntity.setNomeProduto("CELULAR");
+        produtoEntity.setOrigem("BRASIL");
+        produtoEntity.setTipo("ELETRONICO");
+        produtoEntity.setPreco(new BigDecimal("1200.00"));
+        produtoEntity.setNomeEmpresa("EMPRESA Z");
+        produtoEntity.setQuantidade(3);
+        return produtoEntity;
     }
 
 }
