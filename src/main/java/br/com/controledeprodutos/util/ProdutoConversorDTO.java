@@ -26,11 +26,11 @@ public class ProdutoConversorDTO {
 
     public static ProdutoEntity toEntity(ProdutoDTO produtoDTO){
         return ProdutoEntity.builder()
-                .nomeProduto(produtoDTO.getNomeProduto().toUpperCase())
-                .origem(produtoDTO.getOrigem().toUpperCase())
-                .tipo(produtoDTO.getTipo().toUpperCase())
+                .nomeProduto(paraUpperCase(produtoDTO.getNomeProduto()))
+                .origem(paraUpperCase(produtoDTO.getOrigem()))
+                .tipo(paraUpperCase(produtoDTO.getTipo()))
                 .preco(produtoDTO.getPreco())
-                .nomeEmpresa(produtoDTO.getNomeEmpresa().toUpperCase())
+                .nomeEmpresa(paraUpperCase(produtoDTO.getNomeEmpresa()))
                 .quantidade(produtoDTO.getQuantidade())
                 .build();
     }
@@ -57,5 +57,12 @@ public class ProdutoConversorDTO {
 
         String valorNumerico = valorString.replace("$", "");
         return new BigDecimal(valorNumerico);
+    }
+
+    private static String paraUpperCase(String str){
+       if(str != null){
+           return str.toUpperCase();
+       }
+       return str;
     }
 }
