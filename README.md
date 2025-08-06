@@ -1,7 +1,9 @@
 # Controle de Produtos
 
-Uma API RESTful completa para o gerenciamento de produtos. Esta aplicação permite a realização de operações CRUD (Criar, Consultar Dados) de produtos, 
-utilizando um banco de dados H2 em memória para agilizar o desenvolvimento e os testes.
+Uma API RESTful para o gerenciamento de produtos. Esta aplicação permite a realização de operações CRUD (Criar, Consultar Dados) de produtos, 
+utilizando um banco de dados H2 em memória para agilizar o desenvolvimento e os testes. Ao subir a aplicação temos uma classe chamada 
+CarregaMassaDados.java  que implementa CommandLineRunner que executa o processamento de 4 arquivos .json num processo stream paralelo  
+para ser mais rápido possível a leitura e armazenamento dos registros no banco.
 
 ---
 
@@ -29,21 +31,13 @@ Certifique-se de ter o **Java 17** e o **Gradle 8.14.3** instalados na sua máqu
 
 ### Passos
 
-1.  **Clone o repositório:**
+    **Clone o repositório:**
     ```bash
     git clone https://github.com/tatianenm/ControleDeProdutos.git
-    ```
-
-2.  **Navegue até o diretório do projeto:**
-    ```gradle.properties setar jdk 17 bash
-    cd [nome-do-seu-projeto]
-    ```
-
-3.  **Execute a aplicação usando Gradle:**
-    ```bash
-    ./gradlew bootRun
-    ```
-    *(No Windows, use `gradlew.bat bootRun`)*
+    gradle.properties setar jdk 17
+    via intellij executar gradle build
+    subir a aplicação
+    
 
 A aplicação será iniciada na porta `8080`.  O Flyway executará as migrações automaticamente no banco de dados H2 na inicialização.
 src/main/resources/
