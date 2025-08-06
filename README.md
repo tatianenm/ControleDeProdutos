@@ -35,7 +35,7 @@ Certifique-se de ter o **Java 17** e o **Gradle 8.14.3** instalados na sua máqu
     ```
 
 2.  **Navegue até o diretório do projeto:**
-    ```bash
+    ```gradle.properties setar jdk 17 bash
     cd [nome-do-seu-projeto]
     ```
 
