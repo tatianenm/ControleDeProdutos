@@ -1,4 +1,4 @@
-    package br.com.controledeprodutos.api;
+    package br.com.controledeprodutos.controller;
 
     import br.com.controledeprodutos.dto.ProdutoDTO;
     import br.com.controledeprodutos.service.ProdutoService;
